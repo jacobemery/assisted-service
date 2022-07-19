@@ -1,5 +1,5 @@
 # Build binaries
-FROM registry.ci.openshift.org/openshift/release:golang-1.17 as builder
+FROM registry.ci.openshift.org/openshift/release:golang-1.18 as builder
 WORKDIR /src
 COPY . .
 RUN CGO_ENABLED=1 GOFLAGS="" GO111MODULE=on go build -o /build/assisted-service cmd/main.go

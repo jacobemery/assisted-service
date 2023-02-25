@@ -2729,6 +2729,12 @@ func (b *bareMetalInventory) updateClusterNetworkVMUsage(cluster *common.Cluster
 func (b *bareMetalInventory) updateClusterCPUFeatureUsage(cluster *common.Cluster, usages map[string]models.Usage) {
 	isARM64CPU := cluster.CPUArchitecture == "arm64"
 	b.setUsage(isARM64CPU, usage.CPUArchitectureARM64, nil, usages)
+
+	isPPC64LECPU := cluster.CPUArchitecture == "ppc64le"
+	b.setUsage(isPPC64LECPU, usage.CPUArchitecturePpc64le, nil, usages)
+
+	isS390XCPU := cluster.CPUArchitecture == "s390x"
+	b.setUsage(isS390XCPU, usage.CPUArchitectureS390x, nil, usages)
 }
 
 func (b *bareMetalInventory) updateOperatorsData(ctx context.Context, cluster *common.Cluster, params installer.V2UpdateClusterParams, usages map[string]models.Usage, db *gorm.DB, log logrus.FieldLogger) error {

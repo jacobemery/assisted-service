@@ -4543,7 +4543,20 @@ func (b *bareMetalInventory) RegisterInfraEnvInternal(
 		if err = b.setDiscoveryKernelArgumentsUsage(tx, infraEnv.ClusterID, params.InfraenvCreateParams.KernelArguments); err != nil {
 			log.WithError(err).Warnf("failed to set discovery kernel arguments usage for cluster %s", infraEnv.ClusterID)
 		}
+		if cluster.CPUArchitecture == common.MultiCPUArchitecture {
+			updateClusterCPUFeatureUsage := func(CPUArchitecture string, usages map[string]models.Usage) {
+				switch CPUArchitecture {
+				case common.PowerCPUArchitecture:
+					b.setUsage(true, usage.CPUArchitecturePpc64le, nil, usages)
+				case common.S390xCPUArchitecture:
+					b.setUsage(true, usage.CPUArchitectureS390x, nil, usages)
+				}
+			}
+			usages := make(map[string]models.Usage)
+			updateClusterCPUFeatureUsage(cluster.CPUArchitecture, usages)
+		}
 	}
+
 	if params.InfraenvCreateParams.Proxy != nil {
 		proxy := models.Proxy{
 			HTTPProxy:  params.InfraenvCreateParams.Proxy.HTTPProxy,
